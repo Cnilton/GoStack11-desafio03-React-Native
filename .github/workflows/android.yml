@@ -41,7 +41,14 @@ jobs:
         name: Release artifact
         path: app/build/outputs/apk/ourbuildtype/release/app-artifact-*.apk
         
-    
+    - name: Get branch name (merge)
+      if: github.event_name != 'pull_request'
+      shell: bash
+      run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+      
+    - name: get-npm-version
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@master
         
     - name: Create Release
       id: create_release
@@ -49,8 +56,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${ github.ref##*/ }
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ env.BRANCH_NAME }} ${{ steps.package-version.outputs.current-version}}
+        release_name: Release ${{ env.BRANCH_NAME }} ${{ steps.package-version.outputs.current-version}}
         draft: false
         prerelease: false
 
