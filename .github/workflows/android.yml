@@ -17,6 +17,9 @@ jobs:
         echo "${{ secrets.RELEASE_KEYSTORE }}" > my-release-key.keystore.asc
         gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}" --batch my-release-key.keystore.asc > my-release-key.keystore
       
+    - name: Test
+      run: yarn
+      
     - name: Grant execute permission for gradlew
       run: cd android && chmod +x gradlew
     - name: Build with Gradle
