@@ -15,29 +15,25 @@ jobs:
     - uses: actions/checkout@v3
     - run: |
         echo "${{ secrets.RELEASE_KEYSTORE }}" > my-release-key.keystore.asc
-        gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}" --batch my-release-key.keystore.asc > app/release.keystore
-    
-    - name: set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: gradle
-
+        gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}" --batch my-release-key.keystore.asc > my-release-key.keystore
+      
+    - name: Test
+      run: yarn
+      
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: cd android && chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      run: cd android && ./gradlew build
 
     - name: Sign artifact
       id: signArtifact
       uses: r0adkll/sign-android-release@v1.0.1
       with:
         releaseDirectory: app/build/outputs/apk/ourbuildtype/release
-        alias: ${{ secrets.KEYALIAS }}
-        signingKeyBase64: ${{ secrets.KEYSTORE }}
-        keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-        keyPassword: ${{ secrets.KEY_PASSWORD }}
+        alias: ${{ secrets.ALIAS }}
+        signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE }}
+        keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
 
     - name: Upload our APK
       uses: actions/upload-artifact@v2.2.0
