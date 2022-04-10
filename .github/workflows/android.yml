@@ -19,11 +19,13 @@ jobs:
       
     - name: Test
       run: yarn
+    - name: jetify
+      run: yarn jetify
       
     - name: Grant execute permission for gradlew
       run: cd android && chmod +x gradlew
     - name: Build with Gradle
-      run: cd android && ./gradlew build
+      run: cd android && ./gradlew assembleRelease
 
     - name: Sign artifact
       id: signArtifact
