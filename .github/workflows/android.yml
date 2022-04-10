@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v3
     - run: |
         echo "${{ secrets.RELEASE_KEYSTORE }}" > my-release-key.keystore.asc
-        gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}" --batch my-release-key.keystore.asc > app/my-release-key.keystore
+        gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}" --batch my-release-key.keystore.asc > my-release-key.keystore
     
     - name: set up JDK 11
       uses: actions/setup-java@v3
