@@ -10,18 +10,17 @@ jobs:
   build:
     name: Build and analyse default scheme using xcodebuild command
     runs-on: macos-latest
-    
-    
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
       - name: run Yarn
         run: yarn
         
       - name: install Pods
         run: pod install
         
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Set Default Scheme
         run: |
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
