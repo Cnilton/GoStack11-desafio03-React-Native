@@ -19,7 +19,7 @@ jobs:
         run: yarn
         
       - name: install Pods
-        run: cd ios && pod install && cd ..
+        run: cd ios && pod update Folly --no-repo-update && pod install && cd ..
         
       - name: Set Default Scheme
         run: |
